@@ -53,8 +53,12 @@ public class P5 {
             System.exit(-1);
         }
         
-        ((ProgramNode)root.value).nameAnalysis();  // perform name analysis
+        ((ProgramNode)root.value).nameAnalysis(); // perform name analysis
         
+	if (!ErrMsg.getErr()) {
+	   ((ProgramNode)root.value).typeCheck();
+	}
+
         if (!ErrMsg.getErr()) {  // if no errors, unparse
             ((ASTnode)root.value).unparse(outFile, 0);
         }
