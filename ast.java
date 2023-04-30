@@ -183,8 +183,10 @@ class DeclListNode extends ASTnode {
 	Type r = null;
     	for (DeclNode node : myDecls) {
 	  t = node.typeCheck();
-	  if (t.isErrorType()) {
-	  	r = t;
+	  if (t != null){
+	 	 if (t.isErrorType()) {
+	  		r = t;
+		 }
 	  }
 	}
 	if (r != null) return(r);
@@ -997,7 +999,7 @@ class IfStmtNode extends StmtNode {
                                         "Non-boolean expression used as if condition");
 	}
 
-        return(null);
+        return(stmtType);
     }
 
     /***
@@ -1065,7 +1067,7 @@ class IfElseStmtNode extends StmtNode {
                                         "Non-boolean expression used as if condition");
         }
 
-        return(null);
+        return(thenStmtType);
     }
 
     
@@ -1148,7 +1150,7 @@ class WhileStmtNode extends StmtNode {
                                         "Non-boolean expression used as while condition");
         }
 
-        return(null);
+        return(smtType);
     }
  
     /***
@@ -1349,7 +1351,7 @@ class ReturnStmtNode extends StmtNode {
     }
 
     public Type typeCheck(){
-	    return(null);
+	    return(new VoidType());
     }
     
     /***
@@ -2005,22 +2007,24 @@ class PlusNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-	if(myExp1.typeCheck().isErrorType() || 
+	if(myExp1.typeCheck().isErrorType() | 
 			myExp2.typeCheck().isErrorType()){
 		return(new ErrorType());
 	}
+
+	Type t = myExp1.typeCheck();
 	if(!myExp1.typeCheck().isIntType()){
 		ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
 					"Arithmetic operator applied to non-numeric operand");
-		return(new ErrorType());
+		t = new ErrorType();
 	}
 	if(!myExp2.typeCheck().isIntType()){
 		ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
 					"Arithmetic operator applied to non-numeric operand");
-		return(new ErrorType());
+		t = new ErrorType();
 	}
 
-	return(new IntType());
+	return(t);
 	
     }
 }
@@ -2039,22 +2043,24 @@ class MinusNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-	if(myExp1.typeCheck().isErrorType() || 
+	if(myExp1.typeCheck().isErrorType() | 
 			myExp2.typeCheck().isErrorType()){
 		return(new ErrorType());
 	}
+	Type t = myExp1.typeCheck();
+
         if(!myExp1.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
         if(!myExp2.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
 
-        return(new IntType());
+        return(t);
 
     }
 
@@ -2074,22 +2080,23 @@ class TimesNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-	if(myExp1.typeCheck().isErrorType() || 
+	if(myExp1.typeCheck().isErrorType() | 
 			myExp2.typeCheck().isErrorType()){
 		return(new ErrorType());
 	}
+	Type t = myExp1.typeCheck();
         if(!myExp1.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
         if(!myExp2.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
 
-        return(new IntType());
+        return(t);
 
     }
 
@@ -2109,23 +2116,23 @@ class DivideNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-	if(myExp1.typeCheck().isErrorType() || 
+	if(myExp1.typeCheck().isErrorType() | 
 			myExp2.typeCheck().isErrorType()){
 		return(new ErrorType());
 	}
-
+	Type t = myExp1.typeCheck();
         if(!myExp1.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
         if(!myExp2.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
 
-        return(new IntType());
+        return(t);
 
     }
 
@@ -2145,7 +2152,7 @@ class EqualsNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-	if(myExp1.typeCheck().isErrorType() || 
+	if(myExp1.typeCheck().isErrorType() | 
 			myExp2.typeCheck().isErrorType()){
 		return(new ErrorType());
 	}
@@ -2199,7 +2206,7 @@ class NotEqualsNode extends BinaryExpNode {
     }
     
     public Type typeCheck(){
-        if(myExp1.typeCheck().isErrorType() ||
+        if(myExp1.typeCheck().isErrorType() |
                         myExp2.typeCheck().isErrorType()){
                 return(new ErrorType());
         }
@@ -2253,22 +2260,24 @@ class LessNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-	if(myExp1.typeCheck().isErrorType() || 
+	if(myExp1.typeCheck().isErrorType() | 
 			myExp2.typeCheck().isErrorType()){
 		return(new ErrorType());
 	}
+
+	Type t = new BoolType();
         if(!myExp1.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Relational operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
         if(!myExp2.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Relational operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
 
-        return(new BoolType());
+        return(t);
 
     }
 
@@ -2288,23 +2297,24 @@ class LessEqNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-	if(myExp1.typeCheck().isErrorType() || 
+	if(myExp1.typeCheck().isErrorType() | 
 			myExp2.typeCheck().isErrorType()){
 		return(new ErrorType());
 	}
+    
+    	Type t = new BoolType();
         if(!myExp1.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Relational operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
         if(!myExp2.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Relational operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
 
-        return(new BoolType());
-
+        return(t);
     }
 
 }
@@ -2323,22 +2333,23 @@ class GreaterNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-	if(myExp1.typeCheck().isErrorType() || 
+	if(myExp1.typeCheck().isErrorType() | 
 			myExp2.typeCheck().isErrorType()){
 		return(new ErrorType());
 	}
+	Type t = new BoolType();
         if(!myExp1.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Relational operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
         if(!myExp2.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Relational operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
 
-        return(new BoolType());
+        return(t);
 
     }
 
@@ -2358,22 +2369,23 @@ class GreaterEqNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-	if(myExp1.typeCheck().isErrorType() || 
+	if(myExp1.typeCheck().isErrorType() | 
 			myExp2.typeCheck().isErrorType()){
 		return(new ErrorType());
 	}
+	Type t = new BoolType();
         if(!myExp1.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Relational operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
         if(!myExp2.typeCheck().isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Relational operator applied to non-numeric operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
 
-        return(new BoolType());
+        return(t);
 
     }
 
@@ -2393,24 +2405,23 @@ class AndNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-	
-	if(myExp1.typeCheck().isErrorType() || 
+	if(myExp1.typeCheck().isErrorType() | 
 			myExp2.typeCheck().isErrorType()){
 		return(new ErrorType());
 	}
-
+	Type t = new BoolType();
 	if(!myExp1.typeCheck().isBoolType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Logical operator applied to non-boolean operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
         if(!myExp2.typeCheck().isBoolType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Logical operator applied to non-boolean operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
 
-        return(new BoolType());
+        return(t);
 
     }
 }
@@ -2430,22 +2441,23 @@ class OrNode extends BinaryExpNode {
 
     public Type typeCheck(){
 	
-	if(myExp1.typeCheck().isErrorType() || 
+	if(myExp1.typeCheck().isErrorType() | 
 			myExp2.typeCheck().isErrorType()){
 		return(new ErrorType());
 	}
-
-	if(!myExp1.typeCheck().isBoolType()){
+        Type t = new BoolType();
+        if(!myExp1.typeCheck().isBoolType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Logical operator applied to non-boolean operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
         if(!myExp2.typeCheck().isBoolType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Logical operator applied to non-boolean operand");
-                return(new ErrorType());
+                t = new ErrorType();
         }
 
-        return(new BoolType());
+        return(t);
+
     }
 }
