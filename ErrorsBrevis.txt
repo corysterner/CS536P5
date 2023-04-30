@@ -1,0 +1,56 @@
+integer int;
+boolean bool;
+
+int = bool * int;
+int = int * bool;
+bool = int * int;
+bool++;
+
+bool = int < bool;
+bool = bool < int;
+int = int > int;
+
+bool = int && bool;
+bool = bool && int;
+int = bool && bool;
+
+if (int){
+
+}
+
+if (int++){
+
+}
+
+while (int / int){
+
+}
+
+bool = int == true;
+if (bool == int){
+
+}
+int = true;
+
+void func1(){};
+void func2(){};
+
+bool = func1() == func2();
+bool = func1 == func2;
+
+record RecName1 rec1{
+	integer a;
+}
+
+record RecName2 rec2{
+	integer b;
+}
+
+bool = RecName1 == RecName2;
+bool = rec1 \= rec2;
+
+fun1 = fun2;
+
+RecName1 = RecName2;
+
+rec1 = rec2;	
