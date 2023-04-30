@@ -871,9 +871,7 @@ class RecordNode extends TypeNode {
 
 abstract class StmtNode extends ASTnode {
     abstract public void nameAnalysis(SymTab symTab);
-    public Type typeCheck() {
-    	return(null);
-    }
+    public abstract Type typeCheck(); 
 }
 
 class AssignStmtNode extends StmtNode {
@@ -882,7 +880,7 @@ class AssignStmtNode extends StmtNode {
     }
 
     public Type typeCheck() {
-    	return(null);
+    	return(myAssign.typeCheck());
     }
 
     /***
@@ -909,7 +907,18 @@ class PostIncStmtNode extends StmtNode {
     }
 
     public Type typeCheck() {
-    	return(null);
+    	Type t = myExp.typeCheck();
+
+	if (t.isErrorType()){
+		return(new ErrorType());
+	}
+
+	if (!t.isIntType()){
+		ErrMsg.fatal(myExp.lineNum(),myExp.charNum(),
+			"Arithmetic operator applied to non-numeric operand");
+		return(new ErrorType());
+	}
+	return(new IntType());
     }
     
     /***
@@ -936,7 +945,18 @@ class PostDecStmtNode extends StmtNode {
     }
     
     public Type typeCheck() {
-	    return(myExp.typeCheck());
+	Type t = myExp.typeCheck();
+
+        if (t.isErrorType()){
+                return(new ErrorType());
+        }
+
+        if (!t.isIntType()){
+                ErrMsg.fatal(myExp.lineNum(),myExp.charNum(),
+                        "Arithmetic operator applied to non-numeric operand");
+                return(new ErrorType());
+        }
+        return(t);
     }
 
     /***
@@ -965,6 +985,18 @@ class IfStmtNode extends StmtNode {
     }
     
     public Type typeCheck() {
+	Type expType = myExp.typeCheck();
+	Type stmtType = myStmtList.typeCheck();
+
+	if (expType.isErrorType() || stmtType.isErrorType()){
+		return (new ErrorType());
+	}
+	
+	if (!expType.isBoolType()){
+		ErrMsg.fatal(myExp.lineNum(),myExp.charNum(),
+                                        "Non-boolean expression used as if condition");
+	}
+
         return(null);
     }
 
@@ -1019,9 +1051,24 @@ class IfElseStmtNode extends StmtNode {
     }
     
     public Type typeCheck() {
+        Type expType = myExp.typeCheck();
+        Type thenStmtType = myThenStmtList.typeCheck();
+	Type elseStmtType = myElseStmtList.typeCheck();
+
+        if (expType.isErrorType() || elseStmtType.isErrorType()
+			|| thenStmtType.isErrorType()){
+                return (new ErrorType());
+        }
+
+        if (!expType.isBoolType()){
+                ErrMsg.fatal(myExp.lineNum(),myExp.charNum(),
+                                        "Non-boolean expression used as if condition");
+        }
+
         return(null);
     }
 
+    
     /***
      * nameAnalysis
      * Given a symbol table symTab, do:
@@ -1088,7 +1135,22 @@ class WhileStmtNode extends StmtNode {
         myDeclList = dlist;
         myStmtList = slist;
     }
-    
+    public Type typeCheck() {
+        Type expType = myExp.typeCheck();
+        Type smtType = myStmtList.typeCheck();
+
+        if (expType.isErrorType() || smtType.isErrorType()){
+                return (new ErrorType());
+        }
+
+        if (!expType.isBoolType()){
+                ErrMsg.fatal(myExp.lineNum(),myExp.charNum(),
+                                        "Non-boolean expression used as while condition");
+        }
+
+        return(null);
+    }
+ 
     /***
      * nameAnalysis
      * Given a symbol table symTab, do:
@@ -1284,6 +1346,10 @@ class ReturnStmtNode extends StmtNode {
 		return(new ErrorType());
 	}
 	return(fnType);
+    }
+
+    public Type typeCheck(){
+	    return(null);
     }
     
     /***
@@ -1696,7 +1762,7 @@ class AssignExpNode extends ExpNode {
 		return(new ErrorType());
 	}
 			
-	return(t);
+	return(myExp.typeCheck());
     }
 
     /***
