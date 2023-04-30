@@ -1845,6 +1845,11 @@ class CallExpNode extends ExpNode {
 	return(t);
     }
     
+    public Type getReturnType(){
+	FnSym S = (FnSym)myId.sym();
+	return (S.getReturnType());
+    }
+
     public int lineNum() {
         return(myId.lineNum());
     }
@@ -1951,6 +1956,18 @@ class UnaryMinusNode extends UnaryExpNode {
 	if (t.isErrorType()){
 		return(new ErrorType());
 	}
+
+        if (t.isFnType()){
+               if (myExp instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp;
+                        t = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+
 	if (!t.isIntType()){
 		ErrMsg.fatal(myExp.lineNum(),myExp.charNum(),
 					"Arithmetic operator applied to non-numeric operand");
@@ -1977,7 +1994,18 @@ class NotNode extends UnaryExpNode {
 	if (t.isErrorType()){
 		return(new ErrorType());
 	}
-        
+       
+	if (t.isFnType()){
+               if (myExp instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp;
+                        t = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+
 	if (!t.isBoolType()){
                 ErrMsg.fatal(myExp.lineNum(),myExp.charNum(),
                                         "Logical operator applied to non-boolean operand");
@@ -2465,22 +2493,36 @@ class AndNode extends BinaryExpNode {
 
     public Type typeCheck(){
 	Type t = new BoolType();
-	
+	Type exp1Type = myExp1.typeCheck();
+	Type exp2Type = myExp2.typeCheck();
+        
+	//Set Exp2 to the function return type if its a function	
+	if (exp2Type.isFnType()){
+               if (myExp2 instanceof CallExpNode) {
+		        CallExpNode fnCall = (CallExpNode) myExp2;
+			exp2Type = fnCall.getReturnType();
+	       }
+	       else{
+			System.out.print("Something weird in AndNode");
+	       }
+
+	}
+
 	//Exp1
-	if(myExp1.typeCheck().isErrorType()){  
+	if(exp1Type.isErrorType()){  
 		t = new ErrorType();
 	}
-	else if(!myExp1.typeCheck().isBoolType()){
+	else if(!exp1Type.isBoolType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Logical operator applied to non-boolean operand");
                 t = new ErrorType();
         }
 
 	//Exp2
-	if(myExp2.typeCheck().isErrorType()){  
+	if(exp2Type.isErrorType()){  
 		t = new ErrorType();
 	}
-	else if(!myExp2.typeCheck().isBoolType()){
+	else if(!exp2Type.isBoolType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Logical operator applied to non-boolean operand");
                 t = new ErrorType();
@@ -2506,22 +2548,36 @@ class OrNode extends BinaryExpNode {
 
     public Type typeCheck(){
         Type t = new BoolType();
+        Type exp1Type = myExp1.typeCheck();
+        Type exp2Type = myExp2.typeCheck();
+
+        //Set Exp2 to the function return type if its a function
+        if (exp2Type.isFnType()){
+               if (myExp2 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp2;
+                        exp2Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
 
         //Exp1
-        if(myExp1.typeCheck().isErrorType()){
+        if(exp1Type.isErrorType()){
                 t = new ErrorType();
         }
-        else if(!myExp1.typeCheck().isBoolType()){
+        else if(!exp1Type.isBoolType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Logical operator applied to non-boolean operand");
                 t = new ErrorType();
         }
 
         //Exp2
-        if(myExp2.typeCheck().isErrorType()){
+        if(exp2Type.isErrorType()){
                 t = new ErrorType();
         }
-        else if(!myExp2.typeCheck().isBoolType()){
+        else if(!exp2Type.isBoolType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Logical operator applied to non-boolean operand");
                 t = new ErrorType();
