@@ -2034,21 +2034,48 @@ class PlusNode extends BinaryExpNode {
     }
     public Type typeCheck(){
         Type t = new IntType();
-        if(myExp1.typeCheck().isErrorType()){
+        Type exp1Type = myExp1.typeCheck();
+        Type exp2Type = myExp2.typeCheck();
+	    
+	//Set Exp1 to the function return type if its a function
+        if (exp1Type.isFnType()){
+               if (myExp1 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp1;
+                        exp1Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+
+        //Set Exp2 to the function return type if its a function
+        if (exp2Type.isFnType()){
+               if (myExp2 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp2;
+                        exp2Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+	
+        if(exp1Type.isErrorType()){
                 t = new ErrorType();
         }
 
-        else if(!myExp1.typeCheck().isIntType()){
+        else if(!exp1Type.isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
                 t = new ErrorType();
         }
 
-        if(myExp2.typeCheck().isErrorType()){
+        if(exp2Type.isErrorType()){
                 t = new ErrorType();
 
         }
-        else if(!myExp2.typeCheck().isIntType()){
+        else if(!exp2Type.isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
                 t = new ErrorType();
@@ -2074,21 +2101,48 @@ class MinusNode extends BinaryExpNode {
 
     public Type typeCheck(){
         Type t = new IntType();
-        if(myExp1.typeCheck().isErrorType()){
+        Type exp1Type = myExp1.typeCheck();
+        Type exp2Type = myExp2.typeCheck();
+	    
+	//Set Exp1 to the function return type if its a function
+        if (exp1Type.isFnType()){
+               if (myExp1 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp1;
+                        exp1Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+
+        //Set Exp2 to the function return type if its a function
+        if (exp2Type.isFnType()){
+               if (myExp2 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp2;
+                        exp2Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+	
+        if(exp1Type.isErrorType()){
                 t = new ErrorType();
         }
 
-        else if(!myExp1.typeCheck().isIntType()){
+        else if(!exp1Type.isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
                 t = new ErrorType();
         }
 
-        if(myExp2.typeCheck().isErrorType()){
+        if(exp2Type.isErrorType()){
                 t = new ErrorType();
 
         }
-        else if(!myExp2.typeCheck().isIntType()){
+        else if(!exp2Type.isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
                 t = new ErrorType();
@@ -2114,22 +2168,49 @@ class TimesNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-	Type t = new IntType();
-	if(myExp1.typeCheck().isErrorType()){ 
-		t = new ErrorType();
-	}
+        Type t = new IntType();
+        Type exp1Type = myExp1.typeCheck();
+        Type exp2Type = myExp2.typeCheck();
+	    
+	//Set Exp1 to the function return type if its a function
+        if (exp1Type.isFnType()){
+               if (myExp1 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp1;
+                        exp1Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
 
-	else if(!myExp1.typeCheck().isIntType()){
+        }
+
+        //Set Exp2 to the function return type if its a function
+        if (exp2Type.isFnType()){
+               if (myExp2 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp2;
+                        exp2Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+	
+        if(exp1Type.isErrorType()){
+                t = new ErrorType();
+        }
+
+        else if(!exp1Type.isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
                 t = new ErrorType();
         }
 
-	if(myExp2.typeCheck().isErrorType()){
+        if(exp2Type.isErrorType()){
                 t = new ErrorType();
 
-	}
-	else if(!myExp2.typeCheck().isIntType()){
+        }
+        else if(!exp2Type.isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
                 t = new ErrorType();
@@ -2156,21 +2237,48 @@ class DivideNode extends BinaryExpNode {
     
     public Type typeCheck(){
         Type t = new IntType();
-        if(myExp1.typeCheck().isErrorType()){
+        Type exp1Type = myExp1.typeCheck();
+        Type exp2Type = myExp2.typeCheck();
+	    
+	//Set Exp1 to the function return type if its a function
+        if (exp1Type.isFnType()){
+               if (myExp1 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp1;
+                        exp1Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+
+        //Set Exp2 to the function return type if its a function
+        if (exp2Type.isFnType()){
+               if (myExp2 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp2;
+                        exp2Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+	
+        if(exp1Type.isErrorType()){
                 t = new ErrorType();
         }
 
-        else if(!myExp1.typeCheck().isIntType()){
+        else if(!exp1Type.isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
                 t = new ErrorType();
         }
 
-        if(myExp2.typeCheck().isErrorType()){
+        if(exp2Type.isErrorType()){
                 t = new ErrorType();
 
         }
-        else if(!myExp2.typeCheck().isIntType()){
+        else if(!exp2Type.isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Arithmetic operator applied to non-numeric operand");
                 t = new ErrorType();
@@ -2195,19 +2303,46 @@ class EqualsNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-	if(myExp1.typeCheck().isErrorType() | 
-			myExp2.typeCheck().isErrorType()){
-		return(new ErrorType());
-	}
-
 	Type type1 = myExp1.typeCheck();
 	Type type2 = myExp2.typeCheck();
+	Type type1Main = type1;
+	    
+	if(type1.typeCheck().isErrorType() | 
+			type2.typeCheck().isErrorType()){
+		return(new ErrorType());
+	}
+	    
+	//Set Exp1 to the function return type if its a function
+        if (type1.isFnType()){
+               if (myExp1 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp1;
+                        type1 = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+
+        //Set Exp2 to the function return type if its a function
+        if (type2.isFnType()){
+               if (myExp2 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp2;
+                        type2 = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+
         if(!type1.equals(type2)){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Type mismatch");
                 return(new ErrorType());
         }
-	if (type1.isFnType()){
+	
+	if (type1Main.isFnType()){
         	if (myExp1 instanceof IdNode) {
                 	ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                 		"Equality operator applied to function names");
@@ -2225,12 +2360,12 @@ class EqualsNode extends BinaryExpNode {
         		System.out.println("Weirdness in EqualsNode");
         	}
 	}
-	if(type1.isRecordDefType()){
+	if(type1Main.isRecordDefType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Equality operator applied to record names");
                 return(new ErrorType());
 	}
-	if(type1.isRecordType()){
+	if(type1Main.isRecordType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Equality operator applied to record variables");
                 return(new ErrorType());
@@ -2255,48 +2390,73 @@ class NotEqualsNode extends BinaryExpNode {
     }
     
     public Type typeCheck(){
-        if(myExp1.typeCheck().isErrorType() |
-                        myExp2.typeCheck().isErrorType()){
-                return(new ErrorType());
+  	Type type1 = myExp1.typeCheck();
+	Type type2 = myExp2.typeCheck();
+	Type type1Main = type1;
+	    
+	if(type1.typeCheck().isErrorType() | 
+			type2.typeCheck().isErrorType()){
+		return(new ErrorType());
+	}
+	    
+	//Set Exp1 to the function return type if its a function
+        if (type1.isFnType()){
+               if (myExp1 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp1;
+                        type1 = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
         }
 
-        Type type1 = myExp1.typeCheck();
-        Type type2 = myExp2.typeCheck();
+        //Set Exp2 to the function return type if its a function
+        if (type2.isFnType()){
+               if (myExp2 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp2;
+                        type2 = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+
         if(!type1.equals(type2)){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Type mismatch");
                 return(new ErrorType());
         }
-
-        if (type1.isFnType()){
-                if (myExp1 instanceof IdNode) {
-                        ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
-                                "Equality operator applied to function names");
-                    return(new ErrorType());
-                }
-
-                else if (myExp1 instanceof CallExpNode) {
-                        if(((CallExpNode)myExp1).checkVoid()) {
-                                ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
-                                        "Equality operator applied to void function calls");
-                                return(new ErrorType());
-                        }
-                }
-                else {
-                        System.out.println("Weirdness in EqualsNode");
-                }
-        }
-
-        if(type1.isRecordDefType()){
+	
+	if (type1Main.isFnType()){
+        	if (myExp1 instanceof IdNode) {
+                	ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
+                		"Equality operator applied to function names");
+            	    return(new ErrorType());
+        	}	
+        
+		else if (myExp1 instanceof CallExpNode) {
+        		if(((CallExpNode)myExp1).checkVoid()) {
+                		ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
+                               	        "Equality operator applied to void function calls");
+				return(new ErrorType());
+                	}
+        	}
+        	else {
+        		System.out.println("Weirdness in EqualsNode");
+        	}
+	}
+	if(type1Main.isRecordDefType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Equality operator applied to record names");
                 return(new ErrorType());
-        }
-        if(type1.isRecordType()){
+	}
+	if(type1Main.isRecordType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Equality operator applied to record variables");
                 return(new ErrorType());
-        }
+	}
         return(new BoolType());
 
     }
@@ -2318,24 +2478,50 @@ class LessNode extends BinaryExpNode {
 
     public Type typeCheck(){
 	Type t = new BoolType();
+	Type exp1Type = myExp1.typeCheck();
+        Type exp2Type = myExp2.typeCheck();
+	    
+	//Set Exp1 to the function return type if its a function
+        if (exp1Type.isFnType()){
+               if (myExp1 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp1;
+                        exp1Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+
+        //Set Exp2 to the function return type if its a function
+        if (exp2Type.isFnType()){
+               if (myExp2 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp2;
+                        exp2Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
 	
 	//Exp1 check
-	if(myExp1.typeCheck().isErrorType()){  
+	if(exp1Type.isErrorType()){  
 		t = new ErrorType();
 	}
 
-	else if(!myExp1.typeCheck().isIntType()){
+	else if(!exp1Type.isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Relational operator applied to non-numeric operand");
                 t = new ErrorType();
         }
 	
 	//Exp2 check
-	if(myExp2.typeCheck().isErrorType()){ 
+	if(exp2Type.isErrorType()){ 
 		t = new ErrorType();
 	}
 
-	else if(!myExp2.typeCheck().isIntType()){
+	else if(!exp2Type.isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Relational operator applied to non-numeric operand");
                 t = new ErrorType();
@@ -2361,25 +2547,51 @@ class LessEqNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-        Type t = new BoolType();
+ 	Type t = new BoolType();
+	Type exp1Type = myExp1.typeCheck();
+        Type exp2Type = myExp2.typeCheck();
+	    
+	//Set Exp1 to the function return type if its a function
+        if (exp1Type.isFnType()){
+               if (myExp1 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp1;
+                        exp1Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
 
-        //Exp1 check
-        if(myExp1.typeCheck().isErrorType()){ 
-                t = new ErrorType();
         }
 
-        else if(!myExp1.typeCheck().isIntType()){
+        //Set Exp2 to the function return type if its a function
+        if (exp2Type.isFnType()){
+               if (myExp2 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp2;
+                        exp2Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+	
+	//Exp1 check
+	if(exp1Type.isErrorType()){  
+		t = new ErrorType();
+	}
+
+	else if(!exp1Type.isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Relational operator applied to non-numeric operand");
                 t = new ErrorType();
         }
+	
+	//Exp2 check
+	if(exp2Type.isErrorType()){ 
+		t = new ErrorType();
+	}
 
-        //Exp2 check
-        if(myExp2.typeCheck().isErrorType()){
-                t = new ErrorType();
-        }
-
-        else if(!myExp2.typeCheck().isIntType()){
+	else if(!exp2Type.isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Relational operator applied to non-numeric operand");
                 t = new ErrorType();
@@ -2405,25 +2617,51 @@ class GreaterNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-        Type t = new BoolType();
+ 	Type t = new BoolType();
+	Type exp1Type = myExp1.typeCheck();
+        Type exp2Type = myExp2.typeCheck();
+	    
+	//Set Exp1 to the function return type if its a function
+        if (exp1Type.isFnType()){
+               if (myExp1 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp1;
+                        exp1Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
 
-        //Exp1 check
-        if(myExp1.typeCheck().isErrorType()){ 
-                t = new ErrorType();
         }
 
-        else if(!myExp1.typeCheck().isIntType()){
+        //Set Exp2 to the function return type if its a function
+        if (exp2Type.isFnType()){
+               if (myExp2 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp2;
+                        exp2Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+	
+	//Exp1 check
+	if(exp1Type.isErrorType()){  
+		t = new ErrorType();
+	}
+
+	else if(!exp1Type.isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Relational operator applied to non-numeric operand");
                 t = new ErrorType();
         }
+	
+	//Exp2 check
+	if(exp2Type.isErrorType()){ 
+		t = new ErrorType();
+	}
 
-        //Exp2 check
-        if(myExp2.typeCheck().isErrorType()){ 
-                t = new ErrorType();
-        }
-
-        else if(!myExp2.typeCheck().isIntType()){
+	else if(!exp2Type.isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Relational operator applied to non-numeric operand");
                 t = new ErrorType();
@@ -2449,25 +2687,51 @@ class GreaterEqNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-        Type t = new BoolType();
+	Type t = new BoolType();
+	Type exp1Type = myExp1.typeCheck();
+        Type exp2Type = myExp2.typeCheck();
+	    
+	//Set Exp1 to the function return type if its a function
+        if (exp1Type.isFnType()){
+               if (myExp1 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp1;
+                        exp1Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
 
-        //Exp1 check
-        if(myExp1.typeCheck().isErrorType()){
-                t = new ErrorType();
         }
 
-        else if(!myExp1.typeCheck().isIntType()){
+        //Set Exp2 to the function return type if its a function
+        if (exp2Type.isFnType()){
+               if (myExp2 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp2;
+                        exp2Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
+	
+	//Exp1 check
+	if(exp1Type.isErrorType()){  
+		t = new ErrorType();
+	}
+
+	else if(!exp1Type.isIntType()){
                 ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                         "Relational operator applied to non-numeric operand");
                 t = new ErrorType();
         }
+	
+	//Exp2 check
+	if(exp2Type.isErrorType()){ 
+		t = new ErrorType();
+	}
 
-        //Exp2 check
-        if(myExp2.typeCheck().isErrorType()){ 
-                t = new ErrorType();
-        }
-
-        else if(!myExp2.typeCheck().isIntType()){
+	else if(!exp2Type.isIntType()){
                 ErrMsg.fatal(myExp2.lineNum(),myExp2.charNum(),
                                         "Relational operator applied to non-numeric operand");
                 t = new ErrorType();
@@ -2495,6 +2759,18 @@ class AndNode extends BinaryExpNode {
 	Type t = new BoolType();
 	Type exp1Type = myExp1.typeCheck();
 	Type exp2Type = myExp2.typeCheck();
+	    
+	//Set Exp1 to the function return type if its a function
+        if (exp1Type.isFnType()){
+               if (myExp1 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp1;
+                        exp1Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
         
 	//Set Exp2 to the function return type if its a function	
 	if (exp2Type.isFnType()){
@@ -2550,6 +2826,18 @@ class OrNode extends BinaryExpNode {
         Type t = new BoolType();
         Type exp1Type = myExp1.typeCheck();
         Type exp2Type = myExp2.typeCheck();
+	    
+	//Set Exp1 to the function return type if its a function
+        if (exp1Type.isFnType()){
+               if (myExp1 instanceof CallExpNode) {
+                        CallExpNode fnCall = (CallExpNode) myExp1;
+                        exp1Type = fnCall.getReturnType();
+               }
+               else{
+                        System.out.print("Something weird in AndNode");
+               }
+
+        }
 
         //Set Exp2 to the function return type if its a function
         if (exp2Type.isFnType()){
