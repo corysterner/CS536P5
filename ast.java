@@ -1332,12 +1332,12 @@ class ReturnStmtNode extends StmtNode {
 		}
 		return(fnType);
 	}
+	Type t = myExp.typeCheck();
 	if (fnType.isVoidType()) {
 		ErrMsg.fatal(myExp.lineNum(),myExp.charNum(),
 				"Return with a value in a void function");
 		return(new ErrorType());
 	}
-	Type t = myExp.typeCheck();
 	if (t.isErrorType()) {
 		return(t);
 	}
@@ -1735,11 +1735,18 @@ class AssignExpNode extends ExpNode {
     
     public Type typeCheck() {
     	Type t = myLhs.typeCheck();
-	if (myExp.typeCheck().isErrorType() || t.isErrorType()){
+	Type rhsType = myExp.typeCheck();
+
+	if (rhsType.isErrorType() || t.isErrorType()){
 		return (new ErrorType());
 	}
+	
+	if (rhsType.isFnType()){
+		CallExpNode fnCall = (CallExpNode) myExp;
+		rhsType = fnCall.getReturnType();
+	}
 
-	if (!t.equals(myExp.typeCheck())){
+	if (!t.equals(rhsType)){
 		ErrMsg.fatal(myLhs.lineNum(),myLhs.charNum(),
 					"Type mismatch");
 		return(new ErrorType()); 
@@ -1763,7 +1770,7 @@ class AssignExpNode extends ExpNode {
 		return(new ErrorType());
 	}
 			
-	return(myExp.typeCheck());
+	return(rhsType);
     }
 
     /***
@@ -1811,8 +1818,6 @@ class CallExpNode extends ExpNode {
     public boolean checkVoid() {
     	FnSym S = (FnSym)myId.sym();
 	if (S == null) {
-		//TODO remove
-		System.out.print("Error in checkVoid");
 		return(true);
 	}
 	if (S.getReturnType().isVoidType()) {
@@ -1832,8 +1837,6 @@ class CallExpNode extends ExpNode {
 	}
 	FnSym S = (FnSym)myId.sym();
 	if (S == null) {
-		//TODO remove
-		System.out.println("Error in CallExpNode TypeCheck");
 	}
 	if (S.getNumParams() != myExpList.getNum()) {
 		ErrMsg.fatal(myId.lineNum(), myId.charNum(),
@@ -1962,9 +1965,6 @@ class UnaryMinusNode extends UnaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp;
                         t = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
 
@@ -1999,9 +1999,6 @@ class NotNode extends UnaryExpNode {
                if (myExp instanceof CallExpNode) {
                         CallExpNode fnCall = (CallExpNode) myExp;
                         t = fnCall.getReturnType();
-               }
-               else{
-                        System.out.print("Something weird in AndNode");
                }
 
         }
@@ -2043,9 +2040,6 @@ class PlusNode extends BinaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp1;
                         exp1Type = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
 
@@ -2054,9 +2048,6 @@ class PlusNode extends BinaryExpNode {
                if (myExp2 instanceof CallExpNode) {
                         CallExpNode fnCall = (CallExpNode) myExp2;
                         exp2Type = fnCall.getReturnType();
-               }
-               else{
-                        System.out.print("Something weird in AndNode");
                }
 
         }
@@ -2110,9 +2101,6 @@ class MinusNode extends BinaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp1;
                         exp1Type = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
 
@@ -2121,9 +2109,6 @@ class MinusNode extends BinaryExpNode {
                if (myExp2 instanceof CallExpNode) {
                         CallExpNode fnCall = (CallExpNode) myExp2;
                         exp2Type = fnCall.getReturnType();
-               }
-               else{
-                        System.out.print("Something weird in AndNode");
                }
 
         }
@@ -2178,9 +2163,6 @@ class TimesNode extends BinaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp1;
                         exp1Type = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
 
@@ -2189,9 +2171,6 @@ class TimesNode extends BinaryExpNode {
                if (myExp2 instanceof CallExpNode) {
                         CallExpNode fnCall = (CallExpNode) myExp2;
                         exp2Type = fnCall.getReturnType();
-               }
-               else{
-                        System.out.print("Something weird in AndNode");
                }
 
         }
@@ -2246,9 +2225,6 @@ class DivideNode extends BinaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp1;
                         exp1Type = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
 
@@ -2257,9 +2233,6 @@ class DivideNode extends BinaryExpNode {
                if (myExp2 instanceof CallExpNode) {
                         CallExpNode fnCall = (CallExpNode) myExp2;
                         exp2Type = fnCall.getReturnType();
-               }
-               else{
-                        System.out.print("Something weird in AndNode");
                }
 
         }
@@ -2307,8 +2280,8 @@ class EqualsNode extends BinaryExpNode {
 	Type type2 = myExp2.typeCheck();
 	Type type1Main = type1;
 	    
-	if(type1.typeCheck().isErrorType() | 
-			type2.typeCheck().isErrorType()){
+	if(type1.isErrorType() | 
+			type2.isErrorType()){
 		return(new ErrorType());
 	}
 	    
@@ -2318,9 +2291,6 @@ class EqualsNode extends BinaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp1;
                         type1 = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
 
@@ -2329,9 +2299,6 @@ class EqualsNode extends BinaryExpNode {
                if (myExp2 instanceof CallExpNode) {
                         CallExpNode fnCall = (CallExpNode) myExp2;
                         type2 = fnCall.getReturnType();
-               }
-               else{
-                        System.out.print("Something weird in AndNode");
                }
 
         }
@@ -2350,7 +2317,8 @@ class EqualsNode extends BinaryExpNode {
         	}	
         
 		else if (myExp1 instanceof CallExpNode) {
-        		if(((CallExpNode)myExp1).checkVoid()) {
+			Type t = ((CallExpNode)myExp1).getReturnType();
+        		if(t.isVoidType()) {
                 		ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                	        "Equality operator applied to void function calls");
 				return(new ErrorType());
@@ -2394,8 +2362,8 @@ class NotEqualsNode extends BinaryExpNode {
 	Type type2 = myExp2.typeCheck();
 	Type type1Main = type1;
 	    
-	if(type1.typeCheck().isErrorType() | 
-			type2.typeCheck().isErrorType()){
+	if(type1.isErrorType() | 
+			type2.isErrorType()){
 		return(new ErrorType());
 	}
 	    
@@ -2405,9 +2373,6 @@ class NotEqualsNode extends BinaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp1;
                         type1 = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
 
@@ -2416,9 +2381,6 @@ class NotEqualsNode extends BinaryExpNode {
                if (myExp2 instanceof CallExpNode) {
                         CallExpNode fnCall = (CallExpNode) myExp2;
                         type2 = fnCall.getReturnType();
-               }
-               else{
-                        System.out.print("Something weird in AndNode");
                }
 
         }
@@ -2437,7 +2399,8 @@ class NotEqualsNode extends BinaryExpNode {
         	}	
         
 		else if (myExp1 instanceof CallExpNode) {
-        		if(((CallExpNode)myExp1).checkVoid()) {
+			Type t = ((CallExpNode)myExp1).getReturnType();
+        		if(t.isVoidType()) {
                 		ErrMsg.fatal(myExp1.lineNum(),myExp1.charNum(),
                                	        "Equality operator applied to void function calls");
 				return(new ErrorType());
@@ -2487,9 +2450,6 @@ class LessNode extends BinaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp1;
                         exp1Type = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
 
@@ -2498,9 +2458,6 @@ class LessNode extends BinaryExpNode {
                if (myExp2 instanceof CallExpNode) {
                         CallExpNode fnCall = (CallExpNode) myExp2;
                         exp2Type = fnCall.getReturnType();
-               }
-               else{
-                        System.out.print("Something weird in AndNode");
                }
 
         }
@@ -2557,9 +2514,6 @@ class LessEqNode extends BinaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp1;
                         exp1Type = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
 
@@ -2568,9 +2522,6 @@ class LessEqNode extends BinaryExpNode {
                if (myExp2 instanceof CallExpNode) {
                         CallExpNode fnCall = (CallExpNode) myExp2;
                         exp2Type = fnCall.getReturnType();
-               }
-               else{
-                        System.out.print("Something weird in AndNode");
                }
 
         }
@@ -2627,9 +2578,6 @@ class GreaterNode extends BinaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp1;
                         exp1Type = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
 
@@ -2638,9 +2586,6 @@ class GreaterNode extends BinaryExpNode {
                if (myExp2 instanceof CallExpNode) {
                         CallExpNode fnCall = (CallExpNode) myExp2;
                         exp2Type = fnCall.getReturnType();
-               }
-               else{
-                        System.out.print("Something weird in AndNode");
                }
 
         }
@@ -2697,9 +2642,6 @@ class GreaterEqNode extends BinaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp1;
                         exp1Type = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
 
@@ -2708,9 +2650,6 @@ class GreaterEqNode extends BinaryExpNode {
                if (myExp2 instanceof CallExpNode) {
                         CallExpNode fnCall = (CallExpNode) myExp2;
                         exp2Type = fnCall.getReturnType();
-               }
-               else{
-                        System.out.print("Something weird in AndNode");
                }
 
         }
@@ -2766,9 +2705,6 @@ class AndNode extends BinaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp1;
                         exp1Type = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
         
@@ -2777,9 +2713,6 @@ class AndNode extends BinaryExpNode {
                if (myExp2 instanceof CallExpNode) {
 		        CallExpNode fnCall = (CallExpNode) myExp2;
 			exp2Type = fnCall.getReturnType();
-	       }
-	       else{
-			System.out.print("Something weird in AndNode");
 	       }
 
 	}
@@ -2833,9 +2766,6 @@ class OrNode extends BinaryExpNode {
                         CallExpNode fnCall = (CallExpNode) myExp1;
                         exp1Type = fnCall.getReturnType();
                }
-               else{
-                        System.out.print("Something weird in AndNode");
-               }
 
         }
 
@@ -2844,9 +2774,6 @@ class OrNode extends BinaryExpNode {
                if (myExp2 instanceof CallExpNode) {
                         CallExpNode fnCall = (CallExpNode) myExp2;
                         exp2Type = fnCall.getReturnType();
-               }
-               else{
-                        System.out.print("Something weird in AndNode");
                }
 
         }
