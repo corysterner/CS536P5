@@ -7,7 +7,10 @@ void f(integer p1, boolean p2) {
 
 void func1(){}
 void func2(){}
+integer func3(){
+}
 
+boolean func4(){}
 
 record RecName1( 
         integer a;
@@ -55,6 +58,12 @@ void main() {
     aaa = aaa + (\false);
     aaa = aaa + "foo";
     bbb = aaa;
+    bool = 5;
+    int = true;
+    int = func4();
+    bool = func3();
+    int = func3;
+    bool = func4;
 
     // don't give too many or too few error messages here 
     bbb = (aaa + true) && (bbb < true);
@@ -100,4 +109,70 @@ void main() {
 
     }
     int = true;
+
+    // Two arithmetic operator errors
+    int = (int + bool) + bool;
+
+    //Two relation operator errors
+    bool = (int > bool) > bool;
+
+    //String of errors 
+    int = ((bool + int) && int) + 5;
+
+    //Type errors for fucntions
+    bool = func3() == func4();
+    
+    func4() = bool;
+    if(func4()){
+	bool = func3() == func4();
+    }
+    return func3;
+}
+
+boolean e(integer x, boolean b) {
+    integer a;
+    boolean c;
+    integer y;
+    return(c);
+    return (func4);
+    return (func4());
+    return (a);
+    return;
+}
+record Point (
+	integer x;
+	integer y;
+);
+void a(integer b, boolean c) {
+        integer x;
+        record Point t;
+        print <- t;
+        print <- Point;
+        print <- e;
+        a(b, x);
+        return x;
+}
+integer y;
+integer f1(integer x, boolean b) {
+    integer p;
+    boolean c;
+    boolean z;
+    record Point t;
+    scan -> a;
+    scan -> Point;
+    scan -> t;
+    print <- a(p,c);
+    z();
+    a(p, b);
+    e(x, b);
+    return c;
+}
+void g1() {
+    integer a;
+    boolean b;
+    integer y;
+    f1(a, b);
+    g1();
+    f(a,b,y);
+    return;
 }

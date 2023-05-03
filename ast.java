@@ -1341,7 +1341,14 @@ class ReturnStmtNode extends StmtNode {
 	if (t.isErrorType()) {
 		return(t);
 	}
+
+        if (myExp instanceof CallExpNode) {
+                CallExpNode fnCall = (CallExpNode) myExp;
+                t = fnCall.getReturnType();
+        }
+
 	if (!t.equals(fnType)) {
+
 		ErrMsg.fatal(myExp.lineNum(),myExp.charNum(),
 				"Bad return value");
 		return(new ErrorType());
@@ -1742,8 +1749,10 @@ class AssignExpNode extends ExpNode {
 	}
 	
 	if (rhsType.isFnType()){
-		CallExpNode fnCall = (CallExpNode) myExp;
-		rhsType = fnCall.getReturnType();
+		if (myExp instanceof CallExpNode){
+			CallExpNode fnCall = (CallExpNode) myExp;
+			rhsType = fnCall.getReturnType();
+		}
 	}
 
 	if (!t.equals(rhsType)){
